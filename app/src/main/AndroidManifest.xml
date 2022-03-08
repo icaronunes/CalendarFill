@@ -4,6 +4,7 @@
     package="br.com.mirespeiti.calendarfill">
 
     <application
+        android:name=".CalendarApp"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"

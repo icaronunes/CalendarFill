@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <GridView
+        android:id="@+id/grid_calendar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="22dp"
+        android:columnWidth="0dp"
+        android:isScrollContainer="false"
+        android:numColumns="7"
+        android:stretchMode="columnWidth"
+        android:verticalSpacing="12dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/flow_label"
+        tools:itemCount="1" />
+
+    <ImageView
+        android:id="@+id/back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:importantForAccessibility="yes"
+        android:src="@android:drawable/ic_media_previous"
+        app:layout_constraintBottom_toBottomOf="@id/month_year"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/month_year" />
+
+    <ImageView
+        android:id="@+id/forward"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:importantForAccessibility="yes"
+        android:src="@android:drawable/ic_media_next"
+        app:layout_constraintBottom_toBottomOf="@id/month_year"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/month_year" />
+
+    <TextView
+        android:id="@+id/month_year"
+        android:layout_width="0dp"
+        android:layout_height="29dp"
+        android:gravity="center"
+        android:importantForAccessibility="yes"
+        android:textColor="@android:color/black"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@id/forward"
+        app:layout_constraintEnd_toStartOf="@id/forward"
+        app:layout_constraintStart_toEndOf="@id/back"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Fevereiro 2000" />
+
+    <TextView
+        android:id="@+id/label_sunday"
+        android:layout_width="29dp"
+        android:layout_height="29dp"
+        android:gravity="center"
+        android:text="1@string/dom"
+        android:textColor="@android:color/black"
+        android:textSize="16sp"
+        tools:ignore="MissingConstraints" />
+
+    <TextView
+        android:id="@+id/label_monday"
+        android:layout_width="29dp"
+        android:layout_height="29dp"
+        android:gravity="center"
+        android:text="1@string/seg"
+        android:textColor="@android:color/black"
+        android:textSize="16sp"
+        tools:ignore="MissingConstraints" />
+
+    <TextView
+        android:id="@+id/label_tuesday"
+        android:layout_width="29dp"
+        android:layout_height="29dp"
+        android:gravity="center"
+        android:text="1@string/ter"
+        android:textColor="@android:color/black"
+        android:textSize="16sp"
+        tools:ignore="MissingConstraints" />
+
+    <TextView
+        android:id="@+id/label_wednesday"
+        android:layout_width="29dp"
+        android:layout_height="29dp"
+        android:gravity="center"
+        android:text="1@string/qua"
+        android:textColor="@android:color/black"
+        android:textSize="16sp"
+        tools:ignore="MissingConstraints" />
+
+    <TextView
+        android:id="@+id/label_thursday"
+        android:layout_width="29dp"
+        android:layout_height="29dp"
+        android:gravity="center"
+        android:text="1@string/qui"
+        android:textColor="@android:color/black"
+        android:textSize="16sp"
+        tools:ignore="MissingConstraints" />
+
+    <TextView
+        android:id="@+id/label_friday"
+        android:layout_width="29dp"
+        android:layout_height="29dp"
+        android:gravity="center"
+        android:text="1@string/sex"
+        android:textColor="@android:color/black"
+        android:textSize="16sp"
+        tools:ignore="MissingConstraints" />
+
+    <TextView
+        android:id="@+id/label_saturday"
+        android:layout_width="29dp"
+        android:layout_height="29dp"
+        android:gravity="center"
+        android:text="1@string/sab"
+        android:textColor="@android:color/black"
+        android:textSize="16sp"
+        tools:ignore="MissingConstraints" />
+
+    <androidx.constraintlayout.helper.widget.Flow
+        android:id="@+id/flow_label"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        app:constraint_referenced_ids="label_sunday, label_monday, label_tuesday, label_wednesday, label_thursday, label_friday, label_saturday"
+        app:flow_horizontalBias="0"
+        app:flow_horizontalStyle="spread_inside"
+        app:flow_verticalBias="0"
+        app:flow_wrapMode="chain"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/month_year" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!--    tools:listitem="@layout/item_calendar_adapter"-->

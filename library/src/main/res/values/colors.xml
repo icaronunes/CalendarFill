@@ -1,0 +1,11 @@
+<resources>
+    <color name="light_blue_400">#FF29B6F6</color>
+    <color name="light_blue_600">#FF039BE5</color>
+    <color name="gray_400">#FFBDBDBD</color>
+    <color name="gray_600">#FF757575</color>
+
+    <color name="green_20C7A3">#20C7A3</color>
+    <color name="blue_56CCF2">#56CCF2</color>
+    <color name="yellow_F7B100">#F7B100</color>
+    <color name="gray_C1C9D8">#C1C9D8</color>
+</resources>
