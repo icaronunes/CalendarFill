@@ -9,7 +9,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import br.com.mirespeiti.calendarfill.R
 import br.com.mirespeiti.calendarfill.calendardiario.adapter.CalendarDiarioAdapter
 import br.com.mirespeiti.calendarfill.calendardiario.adapter.makeToast
-import br.com.mirespeiti.calendarfill.databinding.CalendarDiarioLayoutBinding
+import br.com.mirespeiti.calendarfill.databinding.CalendarFillLayoutBinding
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -25,7 +25,7 @@ class CalendarFillView @JvmOverloads constructor(
         private const val FORMAT_WEEK = "EEEEE"
     }
 
-    private var bind = CalendarDiarioLayoutBinding.inflate(
+    private var bind = CalendarFillLayoutBinding.inflate(
         LayoutInflater.from(context),
         this,
         true

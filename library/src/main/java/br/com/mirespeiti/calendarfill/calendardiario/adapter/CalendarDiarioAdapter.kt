@@ -1,14 +1,15 @@
 package br.com.mirespeiti.calendarfill.calendardiario.adapter
 
 import android.annotation.SuppressLint
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.TextView
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.graphics.drawable.DrawableCompat
 import br.com.mirespeiti.calendarfill.R
 import br.com.mirespeiti.calendarfill.calendardiario.*
 import br.com.mirespeiti.calendarfill.databinding.ItemCalendarAdapterBinding
@@ -21,7 +22,7 @@ class CalendarDiarioAdapter(
     private val dateColors: Array<CalendarioItem>,
     private var selectedDay: Date,
     private val currentMonth: Calendar,
-    var setup: CalendarConfig = object : CalendarConfig {},
+    var colors: ColorFill = object : ColorFill {},
 ) : ArrayAdapter<Date>(wrapInterface.getContextDiario(), R.layout.item_calendar_adapter, dates) {
     private val inflaterLayout: LayoutInflater by lazy { LayoutInflater.from(context) }
     private val DAYFORMAT = "dd"
@@ -42,84 +43,108 @@ class CalendarDiarioAdapter(
         return view ?: View(context)
     }
 
+    private fun setupViewByInfo(date: Date, container: ConstraintLayout, textView: TextView) {
+        val info = wrapInterface.getCalendarItem(dateColors, date)
+        val prev: CalendarioItem? = date.informationPrev(dateColors)
+        val next: CalendarioItem? = date.informationNext(dateColors)
+        when {
+            date.isSame(selectedDay) -> setupSelectedBackground(textView)
+            info == null -> {
+                if (date.otheMonth(currentMonth.time)) {
+                    fillColorBackground(
+                        color = colors.default(),
+                        view = container,
+                        type = TypeBackground.FULL
+                    )
+                    textView.setTextColor(colors.transparent())
+                } else dayOff(container, textView)
+            }
+            info.isEmpty() -> dayOff(container, textView)
+            info.eventDay() -> dayCurrentEvent(container, textView, prev, next)
+            info.work() -> eventDay(container, textView, prev, next)
+            else -> textView.text = EMPTY
+        }
+    }
+
+    private fun fillColorBackground(color: Int, view: View, type: TypeBackground) {
+        val typeBackground = when (type) {
+            TypeBackground.START -> R.drawable.background_calendar_start
+            TypeBackground.END -> R.drawable.background_calendar_end
+            TypeBackground.FULL -> R.drawable.background_calendar_full
+            TypeBackground.AROUND -> R.drawable.background_calendar_around
+        }
+        AppCompatResources.getDrawable(context, typeBackground)?.let {
+            val wrappedDrawable = DrawableCompat.wrap(it)
+            DrawableCompat.setTint(
+                wrappedDrawable,
+                ResourcesCompat.getColor(context.resources, color, null)
+            )
+            view.background = wrappedDrawable
+        }
+    }
+
     private fun setupView(container: ConstraintLayout, item: TextView, date: Date) {
         setupViewByInfo(date, container, item)
     }
 
-    private fun setupMonthBackground(container: ConstraintLayout) {
-        ResourcesCompat.getDrawable(context.resources, setup.backgroundBackground(), null)?.let {
-            container.background = it
-        }
-    }
-
     private fun setupSelectedBackground(item: TextView) {
-        ResourcesCompat.getDrawable(context.resources, setup.selectedDayColor(), null)?.let {
-            item.background = it
-        }
+        fillColorBackground(color = colors.selected(), view = item, type = TypeBackground.AROUND)
     }
 
     private fun dayOff(
         container: ConstraintLayout,
         item: TextView,
     ) {
-        container.setBackgroundColor(
-            ResourcesCompat.getColor(
-                context.resources,
-                android.R.color.transparent,
-                null
-            )
+        fillColorBackground(
+            color = android.R.color.transparent,
+            view = container,
+            type = TypeBackground.FULL
         )
+
         item.setTextColor(
             ResourcesCompat.getColor(
                 context.resources,
-                R.color.light_blue_600,
+                colors.default(),
                 null
             )
         )
-    }
-
-    private fun setupViewByInfo(date: Date, container: ConstraintLayout, item: TextView) {
-        val info = wrapInterface.getCalendarItem(dateColors, date)
-        val prev: CalendarioItem? = date.informationPrev(dateColors) //usar wrapinterface como ext
-        val next: CalendarioItem? = date.informationNext(dateColors)
-        when {
-            date.isSame(selectedDay) -> setupSelectedBackground(item)
-            info == null -> {
-                if (date.otheMonth(currentMonth.time)) {
-                    setupMonthBackground(container)
-                } else {
-                    dayOff(container, item)
-                }
-            }
-            info.isEmpty() -> dayOff(container, item)
-            info.eventDay() -> {
-                dayCurrentEvent(container, item, prev, next)
-            } // Azul
-            info.work() -> eventDay(container, item, prev, next) // verde
-            else -> item.text = EMPTY
-        }
-        Log.d("Calendar", "updateDates: ${date.toGMTString()} -- ${info.toString()}")
     }
 
     private fun dayCurrentEvent(
         container: ConstraintLayout,
-        item: TextView,
+        number: TextView,
         prev: CalendarioItem?,
         next: CalendarioItem?
     ) {
         val back = prev?.eventDay() == true && !selectedDay.isSame(prev.dayOn())
         val forward = next?.eventDay() == true && !selectedDay.isSame(next.dayOn())
         when {
-            back && forward -> container.background = getDrawable(setup.backgroundTodo())
-            !back && forward -> container.background = getDrawable(setup.backgroundTodoInit())
-            back && !forward -> container.background = getDrawable(setup.backgroundTodoEnd())
-            !back && !forward -> item.background = getDrawable(setup.backgroundTodoAround())
+            back && forward -> fillColorBackground(
+                color = colors.primary(),
+                view = container,
+                type = TypeBackground.FULL
+            )
+            !back && forward -> fillColorBackground(
+                color = colors.primary(),
+                view = container,
+                type = TypeBackground.START
+            )
+            back && !forward -> fillColorBackground(
+                color = colors.primary(),
+                view = container,
+                type = TypeBackground.END
+            )
+            !back && !forward -> fillColorBackground(
+                color = colors.primary(),
+                view = number,
+                type = TypeBackground.AROUND
+            )
         }
     }
 
     private fun eventDay(
         container: ConstraintLayout,
-        item: TextView,
+        text: TextView,
         prev: CalendarioItem?,
         next: CalendarioItem?,
     ) {
@@ -127,10 +152,26 @@ class CalendarDiarioAdapter(
         val forward = next?.work() ?: false && !selectedDay.isSame(next?.dayOn())
 
         when {
-            back && forward -> container.background = getDrawable(setup.backgroundDone())
-            !back && forward -> container.background = getDrawable(setup.backgroundDoneInit())
-            back && !forward -> container.background = getDrawable(setup.backgroundDoneEnd())
-            !back && !forward -> item.background = getDrawable(setup.backgroundDoneAround())
+            back && forward -> fillColorBackground(
+                color = colors.secondary(),
+                view = container,
+                type = TypeBackground.FULL
+            )
+            !back && forward -> fillColorBackground(
+                color = colors.secondary(),
+                view = container,
+                type = TypeBackground.START
+            )
+            back && !forward -> fillColorBackground(
+                color = colors.secondary(),
+                view = container,
+                type = TypeBackground.END
+            )
+            !back && !forward -> fillColorBackground(
+                color = colors.secondary(),
+                view = text,
+                type = TypeBackground.AROUND
+            )
         }
     }
 
@@ -144,7 +185,6 @@ class CalendarDiarioAdapter(
         return informations.getOrNull(position + 1)
     }
 
-    private fun getDrawable(drawable: Int) = ResourcesCompat.getDrawable(context.resources, drawable, null)
     override fun getItem(position: Int) = dates[position]
 }
 

@@ -12,7 +12,7 @@
         android:id="@+id/txt_date"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        tools:text="81"
+        tools:text="31"
         android:gravity="center|center_horizontal"
         android:textSize="16sp"
         android:paddingEnd="5dp"
