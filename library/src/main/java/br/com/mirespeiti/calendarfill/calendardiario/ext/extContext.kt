@@ -1,8 +1,7 @@
-package br.com.mirespeiti.calendarfill.calendardiario.adapter
+package br.com.mirespeiti.calendarfill.calendardiario.ext
 
 import android.content.Context
 import android.widget.Toast
-import br.com.mirespeiti.calendarfill.R
 
 fun Context.makeToast(txt: Int) {
     makeToast(getString(txt))
