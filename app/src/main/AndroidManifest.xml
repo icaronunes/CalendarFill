@@ -3,6 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="br.com.mirespeiti.calendarfill">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:name=".CalendarApp"
         android:allowBackup="true"

@@ -1,4 +1,4 @@
-package br.com.mirespeiti.calendarfill.calendardiario
+package br.com.mirespeiti.calendarfill.calendardiario.domain
 
 import java.util.*
 //Todo = transformar em listas

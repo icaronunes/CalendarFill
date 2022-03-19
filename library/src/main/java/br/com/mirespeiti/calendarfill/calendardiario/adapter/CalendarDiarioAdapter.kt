@@ -6,12 +6,17 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.TextView
+import androidx.annotation.ColorRes
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import br.com.mirespeiti.calendarfill.R
 import br.com.mirespeiti.calendarfill.calendardiario.*
+import br.com.mirespeiti.calendarfill.calendardiario.domain.*
+import br.com.mirespeiti.calendarfill.calendardiario.ext.ifValid
+import br.com.mirespeiti.calendarfill.calendardiario.ext.isSame
+import br.com.mirespeiti.calendarfill.calendardiario.ext.otheMonth
 import br.com.mirespeiti.calendarfill.databinding.ItemCalendarAdapterBinding
 import java.text.SimpleDateFormat
 import java.util.*
@@ -22,7 +27,7 @@ class CalendarDiarioAdapter(
     private val dateColors: Array<CalendarioItem>,
     private var selectedDay: Date,
     private val currentMonth: Calendar,
-    var colors: ColorFill = object : ColorFill {},
+    val colors: ColorFill,
 ) : ArrayAdapter<Date>(wrapInterface.getContextDiario(), R.layout.item_calendar_adapter, dates) {
     private val inflaterLayout: LayoutInflater by lazy { LayoutInflater.from(context) }
     private val DAYFORMAT = "dd"
@@ -52,11 +57,11 @@ class CalendarDiarioAdapter(
             info == null -> {
                 if (date.otheMonth(currentMonth.time)) {
                     fillColorBackground(
-                        color = colors.default(),
+                        color = colors.default,
                         view = container,
                         type = TypeBackground.FULL
                     )
-                    textView.setTextColor(colors.transparent())
+                    textView.setTextColor(ResourcesCompat.getColor(context.resources, android.R.color.white, null))
                 } else dayOff(container, textView)
             }
             info.isEmpty() -> dayOff(container, textView)
@@ -66,7 +71,7 @@ class CalendarDiarioAdapter(
         }
     }
 
-    private fun fillColorBackground(color: Int, view: View, type: TypeBackground) {
+    private fun fillColorBackground(@ColorRes color: Int, view: View, type: TypeBackground) {
         val typeBackground = when (type) {
             TypeBackground.START -> R.drawable.background_calendar_start
             TypeBackground.END -> R.drawable.background_calendar_end
@@ -88,7 +93,7 @@ class CalendarDiarioAdapter(
     }
 
     private fun setupSelectedBackground(item: TextView) {
-        fillColorBackground(color = colors.selected(), view = item, type = TypeBackground.AROUND)
+        fillColorBackground(color = colors.selected, view = item, type = TypeBackground.AROUND)
     }
 
     private fun dayOff(
@@ -104,7 +109,7 @@ class CalendarDiarioAdapter(
         item.setTextColor(
             ResourcesCompat.getColor(
                 context.resources,
-                colors.default(),
+                colors.default,
                 null
             )
         )
@@ -120,22 +125,22 @@ class CalendarDiarioAdapter(
         val forward = next?.eventDay() == true && !selectedDay.isSame(next.dayOn())
         when {
             back && forward -> fillColorBackground(
-                color = colors.primary(),
+                color = colors.primary,
                 view = container,
                 type = TypeBackground.FULL
             )
             !back && forward -> fillColorBackground(
-                color = colors.primary(),
+                color = colors.primary,
                 view = container,
                 type = TypeBackground.START
             )
             back && !forward -> fillColorBackground(
-                color = colors.primary(),
+                color = colors.primary,
                 view = container,
                 type = TypeBackground.END
             )
             !back && !forward -> fillColorBackground(
-                color = colors.primary(),
+                color = colors.primary,
                 view = number,
                 type = TypeBackground.AROUND
             )
@@ -153,22 +158,22 @@ class CalendarDiarioAdapter(
 
         when {
             back && forward -> fillColorBackground(
-                color = colors.secondary(),
+                color = colors.secondary,
                 view = container,
                 type = TypeBackground.FULL
             )
             !back && forward -> fillColorBackground(
-                color = colors.secondary(),
+                color = colors.secondary,
                 view = container,
                 type = TypeBackground.START
             )
             back && !forward -> fillColorBackground(
-                color = colors.secondary(),
+                color = colors.secondary,
                 view = container,
                 type = TypeBackground.END
             )
             !back && !forward -> fillColorBackground(
-                color = colors.secondary(),
+                color = colors.secondary,
                 view = text,
                 type = TypeBackground.AROUND
             )

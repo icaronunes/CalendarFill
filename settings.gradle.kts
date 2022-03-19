@@ -15,3 +15,4 @@ dependencyResolutionManagement {
 rootProject.name = "CalendarFill"
 include(":library")
 include(":app")
+include(":data")
