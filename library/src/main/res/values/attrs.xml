@@ -1,7 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
-    <declare-styleable name="CalendarDiarioView">
+    <declare-styleable name="CalendarFillView">
+        <attr name="fill_colorPrimary" format="color" />
+        <attr name="fill_colorSecondary" format="color" />
+        <attr name="fill_default" format="color" />
+        <attr name="fill_selected" format="color" />
+        <attr name="fill_other" format="color" />
+        <attr name="fill_title" format="string" />
+        <attr name="type_callback" format="enum">
+            <enum name="with_return" value="1"/>
+            <enum name="not_return" value="2"/>
+            <enum name="both" value="0"/>
+        </attr>
     </declare-styleable>
-
 </resources>

@@ -4,11 +4,13 @@ import android.content.Context
 import android.util.AttributeSet
 import android.util.Log
 import android.view.LayoutInflater
-import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import br.com.mirespeiti.calendarfill.R
 import br.com.mirespeiti.calendarfill.calendardiario.adapter.CalendarDiarioAdapter
-import br.com.mirespeiti.calendarfill.calendardiario.adapter.makeToast
+import br.com.mirespeiti.calendarfill.calendardiario.domain.CalendarioItem
+import br.com.mirespeiti.calendarfill.calendardiario.domain.ColorFill
+import br.com.mirespeiti.calendarfill.calendardiario.ext.isSame
+import br.com.mirespeiti.calendarfill.calendardiario.ext.makeToast
 import br.com.mirespeiti.calendarfill.databinding.CalendarFillLayoutBinding
 import java.text.SimpleDateFormat
 import java.util.*
@@ -25,35 +27,71 @@ class CalendarFillView @JvmOverloads constructor(
         private const val FORMAT_WEEK = "EEEEE"
     }
 
+    enum class CallBack { BOTH, WITH_RETURN, NOT_RETURN }
+
+    private var monthCurent: Calendar = GregorianCalendar.getInstance()
+    private var colors: ColorFill = object : ColorFill() {}
+
     private var bind = CalendarFillLayoutBinding.inflate(
         LayoutInflater.from(context),
         this,
         true
     )
 
-    var monthCurent: Calendar = GregorianCalendar.getInstance()
-    private lateinit var activity: AppCompatActivity
     var onclick: (Date, CalendarioItem?) -> Unit = { date: Date, _: CalendarioItem? ->
-        activity.makeToast(date.toGMTString())
+        context.makeToast(date.toGMTString())
     }
-    var callDataColors: (Calendar) -> Array<CalendarioItem> = {
-        emptyArray()
-    }
+    var callUpdates: (Calendar) -> Array<CalendarioItem> = { emptyArray() }
+    var callDate: (Calendar) -> Unit = { }
     private var dateSelected: Date = Date()
+    private var typeCallBack: CallBack = CallBack.WITH_RETURN
 
     init {
         initViews(attrs, defStyleAttr, defStyleRes)
         fillWeekDayLabel()
+
         bind.forward.setOnClickListener {
             monthCurent.add(Calendar.MONTH, 1)
-            val colors = callDataColors(monthCurent)
-            updateDates(datesColors = colors, selectedMoth = monthCurent)
+            callBacks()
         }
 
         bind.back.setOnClickListener {
             monthCurent.add(Calendar.MONTH, -1)
-            val colors = callDataColors(monthCurent)
-            updateDates(datesColors = colors, selectedMoth = monthCurent)
+            callBacks()
+        }
+    }
+
+    private fun initViews(attrs: AttributeSet?, defStyle: Int, defStyleRes: Int) {
+        attrs ?: return
+        val attributeSet = context.obtainStyledAttributes(
+            attrs,
+            R.styleable.CalendarFillView,
+            defStyle,
+            defStyleRes
+        )
+        with(attributeSet) {
+            try {
+                colors.primary =
+                    getResourceId(R.styleable.CalendarFillView_fill_colorPrimary, colors.primary)
+                colors.secondary = getResourceId(
+                    R.styleable.CalendarFillView_fill_colorSecondary,
+                    colors.secondary
+                )
+                colors.default =
+                    getResourceId(R.styleable.CalendarFillView_fill_default, colors.default)
+                colors.selected =
+                    getResourceId(R.styleable.CalendarFillView_fill_selected, colors.selected)
+                colors.other = getResourceId(R.styleable.CalendarFillView_fill_other, colors.other)
+                typeCallBack = getInt(R.styleable.CalendarFillView_type_callback, 0).let {
+                    when (it) {
+                        CallBack.WITH_RETURN.ordinal -> CallBack.WITH_RETURN
+                        CallBack.NOT_RETURN.ordinal -> CallBack.NOT_RETURN
+                        else -> CallBack.BOTH
+                    }
+                }
+            } finally {
+                recycle()
+            }
         }
     }
 
@@ -61,63 +99,89 @@ class CalendarFillView @JvmOverloads constructor(
         val aux: Calendar = Calendar.getInstance()
         var account = 0
         do {
-             val week = SimpleDateFormat(FORMAT_WEEK, Locale.getDefault()).format(aux.time)
-             when (aux[Calendar.DAY_OF_WEEK]) {
-                Calendar.SUNDAY -> { bind.labelSunday.text = week }
-                Calendar.MONDAY -> { bind.labelMonday.text = week  }
-                Calendar.TUESDAY -> { bind.labelTuesday.text = week }
-                Calendar.WEDNESDAY -> {bind.labelWednesday.text = week }
-                Calendar.THURSDAY -> { bind.labelThursday.text = week }
-                Calendar.FRIDAY -> { bind.labelFriday.text = week }
-                Calendar.SATURDAY-> { bind.labelSaturday.text = week }
-             }
+            val week = SimpleDateFormat(FORMAT_WEEK, Locale.getDefault()).format(aux.time)
+            when (aux[Calendar.DAY_OF_WEEK]) {
+                Calendar.SUNDAY -> {
+                    bind.labelSunday.text = week
+                }
+                Calendar.MONDAY -> {
+                    bind.labelMonday.text = week
+                }
+                Calendar.TUESDAY -> {
+                    bind.labelTuesday.text = week
+                }
+                Calendar.WEDNESDAY -> {
+                    bind.labelWednesday.text = week
+                }
+                Calendar.THURSDAY -> {
+                    bind.labelThursday.text = week
+                }
+                Calendar.FRIDAY -> {
+                    bind.labelFriday.text = week
+                }
+                Calendar.SATURDAY -> {
+                    bind.labelSaturday.text = week
+                }
+            }
             ++account
             aux.set(Calendar.DATE, account)
         } while (account <= 7)
     }
 
-    private fun initViews(attrs: AttributeSet?, defStyle: Int, defStyleRes: Int) {
-        attrs ?: return
-        val attributeSet = context.obtainStyledAttributes(
-            attrs,
-            R.styleable.CalendarDiarioView,
-            defStyle,
-            defStyleRes
-        )
-        with(attributeSet) {
-            try {
-            } finally {
-                recycle()
-            }
-        }
-
-        updateDates()
-    }
-
-    fun setupToolbarCalendar(
-        activity: AppCompatActivity,
+    fun initSetupToolbarCalendar(
         initMonth: Calendar,
+        datesColors: Array<CalendarioItem> = arrayOf(),
+        colors: ColorFill? = null,
+        notReturn: (Calendar) -> Unit = {},
+        withReturn: (Calendar) -> Array<CalendarioItem> = { emptyArray() }
     ) {
         monthCurent = initMonth
         dateSelected = initMonth.time
-        this.activity = activity
+        colors?.let { this.colors = it }
+        callDate = notReturn
+        callUpdates = withReturn
+        updateDates(datesColors = datesColors)
+        callBacks()
     }
 
-    private fun updateDescription(calendar: Calendar) {
+    private fun callBacks() {
+        when (typeCallBack) {
+            CallBack.NOT_RETURN -> callDate(monthCurent)
+            CallBack.WITH_RETURN -> {
+                val datesColors = callUpdates(monthCurent)
+                updateDates(datesColors = datesColors, selectedMoth = monthCurent)
+            }
+            CallBack.BOTH -> {
+                val datesColors = callUpdates(monthCurent)
+                updateDates(datesColors = datesColors, selectedMoth = monthCurent)
+                callDate(monthCurent)
+            }
+        }
+    }
+
+    private fun updateDescriptionMonth(calendar: Calendar) {
         bind.monthYear.text = SimpleDateFormat(FORMAT_MONTH_YEAR, Locale.getDefault())
             .format(calendar.time)
             .replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
     }
 
-    private fun updateDates(
+    fun updateDates(
         datesColors: Array<CalendarioItem> = arrayOf(),
         selectedMoth: Calendar = monthCurent
     ) {
-        updateDescription(selectedMoth.clone() as Calendar)
+        updateDescriptionMonth(selectedMoth.clone() as Calendar)
         val dayOnGrid: MutableList<Date> = fillDaysOnVisible(selectedMoth)
         Log.d("Calendar", "data selecionada ${dateSelected.toGMTString()}")
         bind.gridCalendar.adapter =
-            CalendarDiarioAdapter(this, dayOnGrid, datesColors, dateSelected, selectedMoth)
+            CalendarDiarioAdapter(
+                wrapInterface = this,
+                dates = dayOnGrid,
+                dateColors = datesColors,
+                selectedDay = dateSelected,
+                currentMonth = selectedMoth,
+                colors = colors
+            )
+
         bind.gridCalendar.setOnItemClickListener { parent, _, position, _ ->
             val calendarItemSelected =
                 getCalendarItem(informations = datesColors, date = dateSelected)
@@ -125,11 +189,12 @@ class CalendarFillView @JvmOverloads constructor(
             onclick(dateSelected, calendarItemSelected)
             bind.gridCalendar.adapter =
                 CalendarDiarioAdapter(
-                    this,
-                    dayOnGrid,
-                    datesColors,
-                    dateSelected,
-                    currentMonth = selectedMoth
+                    wrapInterface = this,
+                    dates = dayOnGrid,
+                    dateColors = datesColors,
+                    selectedDay = dateSelected,
+                    currentMonth = selectedMoth,
+                    colors = colors
                 )
         }
     }
