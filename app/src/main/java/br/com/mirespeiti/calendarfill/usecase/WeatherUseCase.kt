@@ -1,5 +1,6 @@
 package br.com.mirespeiti.calendarfill.usecase
 
+import androidx.lifecycle.SavedStateHandle
 import br.com.mirespeiti.calendarfill.domain.Resource
 import kotlinx.coroutines.flow.flow
 import repository.ReviewsRepository
@@ -7,9 +8,21 @@ import java.util.*
 import javax.inject.Inject
 
 class WeatherUseCase @Inject constructor(
-    private val repository: ReviewsRepository
+    private val repository: ReviewsRepository,
+    saveHandle: SavedStateHandle
 ) {
-    fun execute(month: Calendar) = flow {
+
+    companion object {
+        const val MONTH = "month"
+    }
+
+    init {
+        saveHandle.get<Calendar>(MONTH)?.let {
+            invoke(it)
+        }
+    }
+
+    operator fun invoke(month: Calendar) = flow {
         try {
             emit(Resource.Loading(true))
             val response = repository.getReviewsNYTime(month)

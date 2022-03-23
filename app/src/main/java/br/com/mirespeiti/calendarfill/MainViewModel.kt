@@ -2,15 +2,16 @@ package br.com.mirespeiti.calendarfill
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import br.com.mirespeiti.calendarfill.calendardiario.domain.Calendario
 import br.com.mirespeiti.calendarfill.calendardiario.domain.CalendarioItem
 import br.com.mirespeiti.calendarfill.domain.MapperMovie
-import br.com.mirespeiti.calendarfill.domain.MapperToDTO
 import br.com.mirespeiti.calendarfill.domain.Resource
-import br.com.mirespeiti.calendarfill.domain.ReviewFill
 import br.com.mirespeiti.calendarfill.usecase.WeatherUseCase
-import br.com.mirespeiti.data.Result
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.util.*
 import javax.inject.Inject
@@ -27,7 +28,7 @@ class MainViewModel @Inject constructor(
 
     fun getReviewsOnMonth(month: Calendar) {
         viewModelScope.launch {
-            useCaseWeather.execute(month).collect { resource ->
+            useCaseWeather(month).collect { resource ->
                 when (resource) {
                     is Resource.Success -> {
                         val mapList = resource.data.results?.map {
@@ -54,6 +55,22 @@ class MainViewModel @Inject constructor(
                 }
             }
         }
+    }
+
+    fun fakeDates(it: Calendar): Array<CalendarioItem> {
+        val colors = (1..25).map { number ->
+            val c = Calendar.getInstance()
+            c.time = it.time
+            c.add(Calendar.DATE, number)
+            val date = c.time
+            val item = Calendario(
+                date = date,
+                work = number % 5 == 0,
+                event = if (number == 24) "nada" else "null"
+            )
+            item
+        }.toTypedArray<CalendarioItem>()
+        return colors
     }
 
 }
