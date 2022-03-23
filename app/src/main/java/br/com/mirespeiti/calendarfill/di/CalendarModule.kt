@@ -1,5 +1,7 @@
 package br.com.mirespeiti.calendarfill.di
 
+import api.NyTime
+import br.com.mirespeiti.calendarfill.BuildConfig
 import com.google.gson.GsonBuilder
 import dagger.Module
 import dagger.Provides
@@ -9,7 +11,7 @@ import okhttp3.HttpUrl
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Request
-import api.NyTime
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Converter
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -46,7 +48,7 @@ class CalendarModule {
     fun provideOkHttpKeyInterceptor(): Interceptor {
         return Interceptor { chain ->
             val original: Request = chain.request()
-            val htmlUrl: HttpUrl = original.url()
+            val htmlUrl: HttpUrl = original.url
 
             val url: HttpUrl = htmlUrl.newBuilder()
                 .addQueryParameter("api-key", "ORULCGmPGbmGAIg6VWPIGvB1pdna0A5P")
@@ -61,10 +63,23 @@ class CalendarModule {
     }
 
     @Provides
+    fun provideLoggingInterceptor(): HttpLoggingInterceptor {
+        val httpLoggingInterceptor = HttpLoggingInterceptor()
+        if (BuildConfig.DEBUG) {
+            httpLoggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
+        } else {
+            httpLoggingInterceptor.level = HttpLoggingInterceptor.Level.NONE
+        }
+        return httpLoggingInterceptor
+    }
+
+    @Provides
     fun provideOkHttpAuth(
-        @Named ("AuthInterceptor") authInterceptor: Interceptor,
+        httpLoggingInterceptor: HttpLoggingInterceptor,
+        @Named("AuthInterceptor") authInterceptor: Interceptor,
     ): OkHttpClient {
         return OkHttpClient.Builder()
+            .addInterceptor(httpLoggingInterceptor)
             .addInterceptor(authInterceptor)
             .retryOnConnectionFailure(true)
             .build()
