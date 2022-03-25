@@ -2,7 +2,6 @@ package br.com.mirespeiti.calendarfill.calendardiario
 
 import android.content.Context
 import android.util.AttributeSet
-import android.util.Log
 import android.view.LayoutInflater
 import androidx.constraintlayout.widget.ConstraintLayout
 import br.com.mirespeiti.calendarfill.R

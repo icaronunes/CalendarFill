@@ -1,7 +1,6 @@
 package br.com.mirespeiti.calendarfill
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
@@ -30,8 +29,16 @@ class MainActivity : AppCompatActivity() {
 
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.CREATED) {
-                viewModel.state.collect {
-                    bind.fillCalendar.updateDates(it.reviewsList)
+                viewModel.state.collect { itens ->
+                    bind.fillCalendar.updateDates(itens.reviewsList)
+                }
+            }
+        }
+
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.CREATED) {
+                viewModel.stateFake.collect { fake ->
+                    bind.fillFake.updateDates(fake.reviewsList)
                 }
             }
         }
@@ -42,12 +49,23 @@ class MainActivity : AppCompatActivity() {
 
         bind.fillCalendar.initSetupToolbarCalendar(
             initMonth = Calendar.getInstance(),
-            datesColors = viewModel.fakeDates(Calendar.getInstance()),
+//            datesColors = viewModel.fakeDates(Calendar.getInstance()),
             notReturn = {
                 viewModel.getReviewsOnMonth(it)
+            }
+        )
+
+        bind.fillFake.initSetupToolbarCalendar(
+            initMonth = Calendar.getInstance(),
+            datesColors = viewModel.fakeDates(Calendar.getInstance()),
+            notReturn = {
+                viewModel.getFakeDates(it)
             },
-            withReturn = {
-                viewModel.fakeDates(it)
-            })
+        )
+
+        bind.fillFake.onclick = { date, item ->
+            makeToast(item?.event().toString())
+        }
+
     }
 }

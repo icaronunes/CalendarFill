@@ -26,17 +26,17 @@ class MainViewModel @Inject constructor(
     private val _state = MutableStateFlow(ReviewState())
     val state: StateFlow<ReviewState> = _state.asStateFlow()
 
-    fun getReviewsOnMonth(month: Calendar, fake: Boolean = false) {
+    private val _stateFake = MutableStateFlow(ReviewState())
+    val stateFake: StateFlow<ReviewState> = _stateFake.asStateFlow()
+
+    fun getReviewsOnMonth(month: Calendar) {
         viewModelScope.launch {
             useCaseWeather(month).collect { resource ->
                 when (resource) {
-                    is Resource.Success -> {
-                        val mapList = when(fake) {
-                            false -> resource.data.results?.map {
-                                it.mapTo(mapper)
-                            }?.toTypedArray<CalendarioItem>() ?: emptyArray()
-                            true -> fakeDates(month)
-                        }
+                    is Resource.Success -> {  // Nao precisa chamar
+                        val mapList = resource.data.results?.map {
+                            it.mapTo(mapper)
+                        }?.toTypedArray<CalendarioItem>() ?: emptyArray()
                         _state.update {
                             it.copy(
                                 reviewsList = mapList,
@@ -59,18 +59,28 @@ class MainViewModel @Inject constructor(
         }
     }
 
+    fun getFakeDates(month: Calendar) {
+        _stateFake.update {
+            it.copy(
+                reviewsList = fakeDates(month),
+                error = null,
+                loading = false
+            )
+        }
+    }
+
     fun fakeDates(it: Calendar): Array<CalendarioItem> {
         val colors: MutableList<CalendarioItem> = mutableListOf()
-        (1..25).forEach { number ->
+        (1..30).forEach { number ->
             val c = Calendar.getInstance()
             c.time = it.time
             c.set(Calendar.DATE, number)
-            if(number !in 15..20) {
+            if (number !in 15..20) {
                 val date = c.time
                 val item = Calendario(
                     date = date,
                     work = number % 5 == 0,
-                    event = if (number == 24) "nada" else null
+                    event = if (number in 8..13) "nada" else "null"
                 )
                 colors.add(item)
             }
