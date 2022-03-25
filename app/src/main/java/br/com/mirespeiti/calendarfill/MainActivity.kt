@@ -31,7 +31,6 @@ class MainActivity : AppCompatActivity() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.CREATED) {
                 viewModel.state.collect {
-                    Log.d(this.javaClass.name, it.toString())
                     bind.fillCalendar.updateDates(it.reviewsList)
                 }
             }
@@ -45,7 +44,6 @@ class MainActivity : AppCompatActivity() {
             initMonth = Calendar.getInstance(),
             datesColors = viewModel.fakeDates(Calendar.getInstance()),
             notReturn = {
-                makeToast("E nada")
                 viewModel.getReviewsOnMonth(it)
             },
             withReturn = {

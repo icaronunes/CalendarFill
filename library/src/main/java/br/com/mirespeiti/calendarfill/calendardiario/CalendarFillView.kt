@@ -171,7 +171,6 @@ class CalendarFillView @JvmOverloads constructor(
     ) {
         updateDescriptionMonth(selectedMoth.clone() as Calendar)
         val dayOnGrid: MutableList<Date> = fillDaysOnVisible(selectedMoth)
-        Log.d("Calendar", "data selecionada ${dateSelected.toGMTString()}")
         bind.gridCalendar.adapter =
             CalendarDiarioAdapter(
                 wrapInterface = this,
@@ -219,10 +218,6 @@ class CalendarFillView @JvmOverloads constructor(
         //retorna do dia 1 até o começa da semana
         result.add(Calendar.DAY_OF_MONTH, -firstDayWeek)
         return result
-    }
-
-    private fun validDateOn(dates: Array<CalendarioItem>): Boolean {
-        return getCalendarItem(dates, dateSelected) == null
     }
 
     override fun getContextDiario(): Context = context

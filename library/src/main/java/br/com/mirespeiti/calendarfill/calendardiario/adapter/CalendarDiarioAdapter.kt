@@ -12,9 +12,10 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import br.com.mirespeiti.calendarfill.R
-import br.com.mirespeiti.calendarfill.calendardiario.*
+import br.com.mirespeiti.calendarfill.calendardiario.CalendarDiarioInterface
 import br.com.mirespeiti.calendarfill.calendardiario.domain.*
 import br.com.mirespeiti.calendarfill.calendardiario.ext.ifValid
+import br.com.mirespeiti.calendarfill.calendardiario.ext.isNotSame
 import br.com.mirespeiti.calendarfill.calendardiario.ext.isSame
 import br.com.mirespeiti.calendarfill.calendardiario.ext.otheMonth
 import br.com.mirespeiti.calendarfill.databinding.ItemCalendarAdapterBinding
@@ -48,10 +49,18 @@ class CalendarDiarioAdapter(
         return view ?: View(context)
     }
 
+    private fun Date.dateOnInformation(days: Int): Date {
+        return Calendar.getInstance().apply {
+            time = this@dateOnInformation
+            add(Calendar.DATE, days)
+        }.time
+    }
+
     private fun setupViewByInfo(date: Date, container: ConstraintLayout, textView: TextView) {
         val info = wrapInterface.getCalendarItem(dateColors, date)
-        val prev: CalendarioItem? = date.informationPrev(dateColors)
-        val next: CalendarioItem? = date.informationNext(dateColors)
+
+        val prev: CalendarioItem? = date.dateOnInformation(-1).getInformation(dateColors)
+        val next: CalendarioItem? = date.dateOnInformation(1).getInformation(dateColors)
         when {
             date.isSame(selectedDay) -> setupSelectedBackground(textView)
             info == null -> {
@@ -61,12 +70,18 @@ class CalendarDiarioAdapter(
                         view = container,
                         type = TypeBackground.FULL
                     )
-                    textView.setTextColor(ResourcesCompat.getColor(context.resources, android.R.color.white, null))
+                    textView.setTextColor(
+                        ResourcesCompat.getColor(
+                            context.resources,
+                            android.R.color.white,
+                            null
+                        )
+                    )
                 } else dayOff(container, textView)
             }
             info.isEmpty() -> dayOff(container, textView)
             info.eventDay() -> dayCurrentEvent(container, textView, prev, next)
-            info.work() -> eventDay(container, textView, prev, next)
+            info.work() -> workDay(container, textView, prev, next)
             else -> textView.text = EMPTY
         }
     }
@@ -121,8 +136,8 @@ class CalendarDiarioAdapter(
         prev: CalendarioItem?,
         next: CalendarioItem?
     ) {
-        val back = prev?.eventDay() == true && !selectedDay.isSame(prev.dayOn())
-        val forward = next?.eventDay() == true && !selectedDay.isSame(next.dayOn())
+        val back = prev != null && prev.eventDay() && selectedDay.isNotSame(prev.dayOn())
+        val forward = next != null && next.eventDay() && selectedDay.isNotSame(next.dayOn())
         when {
             back && forward -> fillColorBackground(
                 color = colors.primary,
@@ -147,14 +162,14 @@ class CalendarDiarioAdapter(
         }
     }
 
-    private fun eventDay(
+    private fun workDay(
         container: ConstraintLayout,
         text: TextView,
         prev: CalendarioItem?,
         next: CalendarioItem?,
     ) {
-        val back = prev?.work() ?: false && !selectedDay.isSame(prev?.dayOn())
-        val forward = next?.work() ?: false && !selectedDay.isSame(next?.dayOn())
+        val back = prev != null && prev.work() && selectedDay.isNotSame(prev.dayOn())
+        val forward = next != null && next.work() && selectedDay.isNotSame(next.dayOn())
 
         when {
             back && forward -> fillColorBackground(
@@ -180,14 +195,10 @@ class CalendarDiarioAdapter(
         }
     }
 
-    private fun Date.informationPrev(informations: Array<CalendarioItem>): CalendarioItem? {
-        val position = informations.indexOfFirst { this.isSame(it.dayOn()) }
-        return informations.getOrNull(position - 1)
-    }
-
-    private fun Date.informationNext(informations: Array<CalendarioItem>): CalendarioItem? {
-        val position = informations.indexOfFirst { this.isSame(it.dayOn()) }
-        return informations.getOrNull(position + 1)
+    private fun Date.getInformation(informations: Array<CalendarioItem>): CalendarioItem? {
+        val position = informations.indexOfFirst { isSame(it.dayOn()) }
+        if (position == -1) return null
+        return informations.getOrNull(position)
     }
 
     override fun getItem(position: Int) = dates[position]
