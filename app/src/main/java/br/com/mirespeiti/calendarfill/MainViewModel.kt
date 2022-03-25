@@ -26,15 +26,17 @@ class MainViewModel @Inject constructor(
     private val _state = MutableStateFlow(ReviewState())
     val state: StateFlow<ReviewState> = _state.asStateFlow()
 
-    fun getReviewsOnMonth(month: Calendar) {
+    fun getReviewsOnMonth(month: Calendar, fake: Boolean = false) {
         viewModelScope.launch {
             useCaseWeather(month).collect { resource ->
                 when (resource) {
                     is Resource.Success -> {
-                        val mapList = resource.data.results?.map {
-                            it.mapTo(mapper)
-                        }?.toTypedArray<CalendarioItem>() ?: emptyArray()
-
+                        val mapList = when(fake) {
+                            false -> resource.data.results?.map {
+                                it.mapTo(mapper)
+                            }?.toTypedArray<CalendarioItem>() ?: emptyArray()
+                            true -> fakeDates(month)
+                        }
                         _state.update {
                             it.copy(
                                 reviewsList = mapList,
@@ -58,19 +60,21 @@ class MainViewModel @Inject constructor(
     }
 
     fun fakeDates(it: Calendar): Array<CalendarioItem> {
-        val colors = (1..25).map { number ->
+        val colors: MutableList<CalendarioItem> = mutableListOf()
+        (1..25).forEach { number ->
             val c = Calendar.getInstance()
             c.time = it.time
-            c.add(Calendar.DATE, number)
-            val date = c.time
-            val item = Calendario(
-                date = date,
-                work = number % 5 == 0,
-                event = if (number == 24) "nada" else "null"
-            )
-            item
-        }.toTypedArray<CalendarioItem>()
-        return colors
+            c.set(Calendar.DATE, number)
+            if(number !in 15..20) {
+                val date = c.time
+                val item = Calendario(
+                    date = date,
+                    work = number % 5 == 0,
+                    event = if (number == 24) "nada" else null
+                )
+                colors.add(item)
+            }
+        }
+        return colors.toTypedArray()
     }
-
 }
