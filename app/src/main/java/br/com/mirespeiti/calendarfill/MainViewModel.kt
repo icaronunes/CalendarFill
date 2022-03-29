@@ -6,7 +6,7 @@ import br.com.mirespeiti.calendarfill.calendardiario.domain.Calendario
 import br.com.mirespeiti.calendarfill.calendardiario.domain.CalendarioItem
 import br.com.mirespeiti.calendarfill.domain.MapperMovie
 import br.com.mirespeiti.calendarfill.domain.Resource
-import br.com.mirespeiti.calendarfill.usecase.WeatherUseCase
+import br.com.mirespeiti.calendarfill.usecase.ReviewsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -19,7 +19,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val useCaseWeather: WeatherUseCase,
+    private val useCaseWeather: ReviewsUseCase,
     private val mapper: MapperMovie
 ) : ViewModel() {
 
@@ -29,7 +29,7 @@ class MainViewModel @Inject constructor(
     private val _stateFake = MutableStateFlow(ReviewState())
     val stateFake: StateFlow<ReviewState> = _stateFake.asStateFlow()
 
-    fun getReviewsOnMonth(month: Calendar) {
+    fun getReviewsOnMonth(month: Calendar?) {
         viewModelScope.launch {
             useCaseWeather(month).collect { resource ->
                 when (resource) {

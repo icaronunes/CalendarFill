@@ -10,8 +10,8 @@ class ReviewsRepositoryImp @Inject constructor(
     private val apiService: NyTime
 ) : ReviewsRepository {
 
-    override suspend fun getReviewsNYTime(month: Calendar): ResponseReview {
-        val paramsOnMonth = month.initAndFinal()
+    override suspend fun getReviewsNYTime(month: Calendar?): ResponseReview {
+        val paramsOnMonth = month?.initAndFinal()
         return apiService.getNYMovies(paramsOnMonth)
     }
 }

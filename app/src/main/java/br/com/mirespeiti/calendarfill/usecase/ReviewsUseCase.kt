@@ -7,7 +7,7 @@ import repository.ReviewsRepository
 import java.util.*
 import javax.inject.Inject
 
-class WeatherUseCase @Inject constructor(
+class ReviewsUseCase @Inject constructor(
     private val repository: ReviewsRepository,
     saveHandle: SavedStateHandle
 ) {
@@ -22,7 +22,7 @@ class WeatherUseCase @Inject constructor(
         }
     }
 
-    operator fun invoke(month: Calendar) = flow {
+    operator fun invoke(month: Calendar?) = flow {
         try {
             emit(Resource.Loading(true))
             val response = repository.getReviewsNYTime(month)
