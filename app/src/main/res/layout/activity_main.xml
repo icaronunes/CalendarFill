@@ -1,29 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView  xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="match_parent">
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     android:fitsSystemWindows="true"
     tools:context=".MainActivity">
 
     <br.com.mirespeiti.calendarfill.calendardiario.CalendarFillView
         android:id="@+id/fill_calendar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingBottom="40dp"
+        android:layout_height="350dp"
+        android:paddingBottom="20dp"
         app:type_callback="not_return"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/fill_fake"
         app:layout_constraintStart_toStartOf="parent"/>
 
     <br.com.mirespeiti.calendarfill.calendardiario.CalendarFillView
         android:id="@+id/fill_fake"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="350dp"
         android:paddingBottom="40dp"
         app:type_callback="not_return"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/fill_calendar"
+        app:layout_constraintBottom_toTopOf="@id/fill_custom"
+        />
+
+    <br.com.mirespeiti.calendarfill.calendardiario.CalendarFillView
+        android:id="@+id/fill_custom"
+        android:layout_width="match_parent"
+        android:layout_height="350dp"
+        app:type_callback="not_return"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/fill_fake"
         app:layout_constraintBottom_toBottomOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
-
+</ScrollView>

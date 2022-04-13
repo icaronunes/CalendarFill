@@ -5,7 +5,8 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import androidx.constraintlayout.widget.ConstraintLayout
 import br.com.mirespeiti.calendarfill.R
-import br.com.mirespeiti.calendarfill.calendardiario.adapter.CalendarDiarioAdapter
+import br.com.mirespeiti.calendarfill.calendardiario.adapter.CalendarFillAdapter
+import br.com.mirespeiti.calendarfill.calendardiario.adapter.CalendarFillBaseAdapter
 import br.com.mirespeiti.calendarfill.calendardiario.domain.CalendarioItem
 import br.com.mirespeiti.calendarfill.calendardiario.domain.ColorFill
 import br.com.mirespeiti.calendarfill.calendardiario.ext.isSame
@@ -19,7 +20,7 @@ class CalendarFillView @JvmOverloads constructor(
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0,
     defStyleRes: Int = 0,
-) : ConstraintLayout(context, attrs), CalendarDiarioInterface {
+) : ConstraintLayout(context, attrs), CalendarFillInterface {
     companion object {
         private const val TOTALDAYS = 42
         private const val FORMAT_MONTH_YEAR = "MMMM yyyy"
@@ -28,8 +29,18 @@ class CalendarFillView @JvmOverloads constructor(
 
     enum class CallBack { BOTH, WITH_RETURN, NOT_RETURN }
 
+    private var dateSelected: Date = Date()
+    private var typeCallBack: CallBack = CallBack.WITH_RETURN
     private var monthCurent: Calendar = GregorianCalendar.getInstance()
     private var colors: ColorFill = object : ColorFill() {}
+    private var defaultAdapter: CalendarFillBaseAdapter = CalendarFillAdapter(
+        calendarFillContext = this,
+        dateColors = emptyArray(),
+        dates = fillDaysOnVisible(monthCurent),
+        selectedDay = dateSelected,
+        month = monthCurent,
+        colors = colors
+    )
 
     private var bind = CalendarFillLayoutBinding.inflate(
         LayoutInflater.from(context),
@@ -42,8 +53,6 @@ class CalendarFillView @JvmOverloads constructor(
     }
     var callUpdates: (Calendar) -> Array<CalendarioItem> = { emptyArray() }
     var callDate: (Calendar) -> Unit = { }
-    private var dateSelected: Date = Date()
-    private var typeCallBack: CallBack = CallBack.WITH_RETURN
 
     init {
         initViews(attrs, defStyleAttr, defStyleRes)
@@ -127,18 +136,24 @@ class CalendarFillView @JvmOverloads constructor(
         } while (account <= 7)
     }
 
+
     fun initSetupToolbarCalendar(
         initMonth: Calendar,
         datesColors: Array<CalendarioItem> = arrayOf(),
         colors: ColorFill? = null,
         notReturn: (Calendar) -> Unit = {},
-        withReturn: (Calendar) -> Array<CalendarioItem> = { emptyArray() }
+        withReturn: (Calendar) -> Array<CalendarioItem> = { emptyArray() },
+        adapter: CalendarFillBaseAdapter? = defaultAdapter
     ) {
         monthCurent = initMonth
         dateSelected = initMonth.time
         colors?.let { this.colors = it }
         callDate = notReturn
         callUpdates = withReturn
+        adapter?.let { defaultAdapter = adapter.apply {
+//            dates = fillDaysOnVisible()
+//            notifyDataSetChanged()
+        } }
         updateDates(datesColors = datesColors)
         callBacks()
     }
@@ -169,35 +184,27 @@ class CalendarFillView @JvmOverloads constructor(
         selectedMoth: Calendar = monthCurent
     ) {
         updateDescriptionMonth(selectedMoth.clone() as Calendar)
-        val dayOnGrid: MutableList<Date> = fillDaysOnVisible(selectedMoth)
-        bind.gridCalendar.adapter =
-            CalendarDiarioAdapter(
-                wrapInterface = this,
-                dates = dayOnGrid,
-                dateColors = datesColors,
-                selectedDay = dateSelected,
-                currentMonth = selectedMoth,
-                colors = colors
-            )
+        bind.gridCalendar.adapter = defaultAdapter.apply {
+            selectedDay = dateSelected
+            dateColors = datesColors
+            currentMonth = selectedMoth
+            dates = fillDaysOnVisible(selectedMoth)
+            notifyDataSetChanged()
+        }
 
         bind.gridCalendar.setOnItemClickListener { parent, _, position, _ ->
-            val calendarItemSelected =
-                getCalendarItem(informations = datesColors, date = dateSelected)
+            val calendarItemSelected = getCalendarItem(informations = datesColors, dateSelected)
             dateSelected = parent.getItemAtPosition(position) as Date
             onclick(dateSelected, calendarItemSelected)
-            bind.gridCalendar.adapter =
-                CalendarDiarioAdapter(
-                    wrapInterface = this,
-                    dates = dayOnGrid,
-                    dateColors = datesColors,
-                    selectedDay = dateSelected,
-                    currentMonth = selectedMoth,
-                    colors = colors
-                )
+            bind.gridCalendar.adapter = defaultAdapter.apply {
+                selectedDay = dateSelected
+                dateColors = datesColors
+                notifyDataSetChanged()
+            }
         }
     }
 
-    private fun fillDaysOnVisible(selectedMonth: Calendar): MutableList<Date> {
+    fun fillDaysOnVisible(selectedMonth: Calendar = monthCurent): MutableList<Date> {
         val listDays: MutableList<Date> = mutableListOf()
         val aux = backInitWeek(selectedMonth)
         do { //Cria lista com 42 posicoes

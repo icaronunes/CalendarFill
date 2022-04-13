@@ -7,6 +7,7 @@ import androidx.core.view.WindowCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import br.com.mirespeiti.calendarfill.calendardiario.adapter.SecondCustomAdapterFill
 import br.com.mirespeiti.calendarfill.calendardiario.ext.makeToast
 import br.com.mirespeiti.calendarfill.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -43,13 +44,17 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        bind.fillCalendar.onclick = { date, item ->
-            makeToast(item?.event().toString())
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.CREATED) {
+                viewModel.stateFake.collect { fake ->
+                    bind.fillCustom.updateDates(fake.reviewsList)
+                }
+            }
         }
 
         bind.fillCalendar.initSetupToolbarCalendar(
             initMonth = Calendar.getInstance(),
-//            datesColors = viewModel.fakeDates(Calendar.getInstance()),
+            datesColors = viewModel.fakeDates(Calendar.getInstance()),
             notReturn = {
                 viewModel.getReviewsOnMonth(it)
             }
@@ -61,9 +66,27 @@ class MainActivity : AppCompatActivity() {
             notReturn = {
                 viewModel.getFakeDates(it)
             },
+            adapter = SecondCustomAdapterFill(
+                calendarFillContext = bind.fillFake,
+                selectedDay = Date()
+            )
         )
 
+        bind.fillCustom.initSetupToolbarCalendar(
+            initMonth = Calendar.getInstance(),
+            datesColors = viewModel.fakeDates(Calendar.getInstance()),
+            notReturn = { viewModel.getFakeDates(it) }
+        )
+
+        bind.fillCustom.onclick = { date, item ->
+            makeToast(item?.event().toString())
+        }
+
         bind.fillFake.onclick = { date, item ->
+            makeToast(item?.event().toString())
+        }
+
+        bind.fillCalendar.onclick = { date, item ->
             makeToast(item?.event().toString())
         }
 
