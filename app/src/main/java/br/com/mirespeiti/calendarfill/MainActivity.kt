@@ -7,7 +7,7 @@ import androidx.core.view.WindowCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import br.com.mirespeiti.calendarfill.calendardiario.adapter.SecondCustomAdapterFill
+import br.com.mirespeiti.calendarfill.calendardiario.adapter.FunnyAdapterFill
 import br.com.mirespeiti.calendarfill.calendardiario.ext.makeToast
 import br.com.mirespeiti.calendarfill.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -66,7 +66,7 @@ class MainActivity : AppCompatActivity() {
             notReturn = {
                 viewModel.getFakeDates(it)
             },
-            adapter = SecondCustomAdapterFill(
+            adapter = FunnyAdapterFill(
                 calendarFillContext = bind.fillFake,
                 selectedDay = Date()
             )

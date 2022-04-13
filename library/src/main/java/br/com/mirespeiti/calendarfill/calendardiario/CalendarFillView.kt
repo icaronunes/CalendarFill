@@ -150,10 +150,7 @@ class CalendarFillView @JvmOverloads constructor(
         colors?.let { this.colors = it }
         callDate = notReturn
         callUpdates = withReturn
-        adapter?.let { defaultAdapter = adapter.apply {
-//            dates = fillDaysOnVisible()
-//            notifyDataSetChanged()
-        } }
+        adapter?.let { defaultAdapter = adapter }
         updateDates(datesColors = datesColors)
         callBacks()
     }
