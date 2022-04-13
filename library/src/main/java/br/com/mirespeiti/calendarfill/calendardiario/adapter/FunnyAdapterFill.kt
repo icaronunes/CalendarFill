@@ -6,12 +6,18 @@ import androidx.core.content.res.ResourcesCompat
 import br.com.mirespeiti.calendarfill.R
 import br.com.mirespeiti.calendarfill.calendardiario.CalendarFillInterface
 import br.com.mirespeiti.calendarfill.calendardiario.CalendarFillView
+import br.com.mirespeiti.calendarfill.calendardiario.domain.ColorFill
 import br.com.mirespeiti.calendarfill.calendardiario.domain.TypeBackground
 import java.util.*
 
-class SecondCustomAdapterFill(
+class FunnyAdapterFill(
     calendarFillContext: CalendarFillView,
     override var selectedDay: Date = Date(),
+    override var colors: ColorFill = object : ColorFill() {
+        override var selected: Int = android.R.color.holo_red_dark
+        override var default: Int = android.R.color.holo_green_dark
+        override var secondary: Int = android.R.color.holo_purple
+    },
 ) : CalendarFillBaseAdapter(
     calendarFillContext = calendarFillContext,
     currentMonth = Calendar.getInstance()
@@ -19,15 +25,15 @@ class SecondCustomAdapterFill(
 
     override fun customColorsDates(container: ConstraintLayout, item: TextView, date: Date) {
 
-        when(date.day % 3) {
+        when (date.day % 3) {
             0 -> container.setBackgroundColor(
                 ResourcesCompat.getColor(
-                    context.resources, R.color.light_blue_600, null
+                    context.resources, colors.secondary, null
                 )
             )
             1 -> container.setBackgroundColor(
                 ResourcesCompat.getColor(
-                    context.resources, R.color.gray_C1C9D8, null
+                    context.resources, colors.default, null
                 ))
             else -> setupSelectedBackground(item)
         }
