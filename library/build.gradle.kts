@@ -5,6 +5,7 @@ plugins {
     id("org.jetbrains.kotlin.android")
     id("kotlin-kapt")
     id("dagger.hilt.android.plugin")
+    id("maven-publish")
 
 }
 
@@ -58,4 +59,14 @@ dependencies {
     implementation( "com.google.dagger:hilt-android-compiler:2.39.1")
     androidTestImplementation("androidx.test.ext:junit:1.1.3")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.4.0")
+}
+
+publishing {
+    publications {
+        create<MavenPublication>("maven") {
+            groupId = "br.com.mirespeiti.calendarfill.calendardiario"
+            artifactId = "library"
+            version = "0.1.1"
+        }
+    }
 }
