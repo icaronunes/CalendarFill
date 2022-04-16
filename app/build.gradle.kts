@@ -50,6 +50,7 @@ dependencies {
     implementation(project(":library"))
     implementation(project(":data"))
 //    implementation("com.github.icaronunes:CalendarFill:1.0.1")
+//    implementation("com.github.icaronunes:CalendarFill:-SNAPSHOT")
     implementation("com.github.jitpack:gradle-simple:2.0")
 
 

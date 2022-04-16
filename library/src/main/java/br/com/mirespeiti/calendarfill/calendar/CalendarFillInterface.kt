@@ -8,7 +8,7 @@ import java.util.*
  * TODO: document your custom view class.
  */
 
-interface CalendarFillInterface {
+open interface CalendarFillInterface {
     fun getContextDiario(): Context
     fun getCalendarItem(informations: Array<CalendarioItem>, date: Date): CalendarioItem?
 }
