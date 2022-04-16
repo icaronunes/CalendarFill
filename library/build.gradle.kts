@@ -60,12 +60,12 @@ dependencies {
     androidTestImplementation("androidx.test.espresso:espresso-core:3.4.0")
 }
 
-//publishing {
-//    publications {
-//        create<MavenPublication>("maven") {
-//            groupId = "br.com.mirespeiti.calendarfill.calendardiario"
-//            artifactId = "library"
-//            version = "0.1.1"
-//        }
-//    }
-//}
+publishing {
+    publications {
+        create<MavenPublication>("MavenPublication") {
+            groupId = "br.com.mirespeiti.calendarfill"
+            artifactId = "library"
+
+        }
+    }
+}
