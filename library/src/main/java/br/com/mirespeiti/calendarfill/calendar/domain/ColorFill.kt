@@ -1,4 +1,4 @@
-package br.com.mirespeiti.calendarfill.calendardiario.domain
+package br.com.mirespeiti.calendarfill.calendar.domain
 
 import br.com.mirespeiti.calendarfill.R
 

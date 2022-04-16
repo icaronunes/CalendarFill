@@ -1,4 +1,4 @@
-package br.com.mirespeiti.calendarfill.calendardiario.ext
+package br.com.mirespeiti.calendarfill.calendar.ext
 
 import java.util.*
 

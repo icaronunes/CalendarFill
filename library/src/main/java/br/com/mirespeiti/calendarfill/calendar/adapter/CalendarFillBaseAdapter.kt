@@ -1,4 +1,4 @@
-package br.com.mirespeiti.calendarfill.calendardiario.adapter
+package br.com.mirespeiti.calendarfill.calendar.adapter
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
@@ -13,13 +13,13 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import br.com.mirespeiti.calendarfill.R
-import br.com.mirespeiti.calendarfill.calendardiario.CalendarFillInterface
-import br.com.mirespeiti.calendarfill.calendardiario.CalendarFillView
-import br.com.mirespeiti.calendarfill.calendardiario.domain.CalendarioItem
-import br.com.mirespeiti.calendarfill.calendardiario.domain.ColorFill
-import br.com.mirespeiti.calendarfill.calendardiario.domain.TypeBackground
-import br.com.mirespeiti.calendarfill.calendardiario.domain.eventDay
-import br.com.mirespeiti.calendarfill.calendardiario.ext.isNotSame
+import br.com.mirespeiti.calendarfill.calendar.CalendarFillInterface
+import br.com.mirespeiti.calendarfill.calendar.CalendarFillView
+import br.com.mirespeiti.calendarfill.calendar.domain.CalendarioItem
+import br.com.mirespeiti.calendarfill.calendar.domain.ColorFill
+import br.com.mirespeiti.calendarfill.calendar.domain.TypeBackground
+import br.com.mirespeiti.calendarfill.calendar.domain.eventDay
+import br.com.mirespeiti.calendarfill.calendar.ext.isNotSame
 import br.com.mirespeiti.calendarfill.databinding.ItemCalendarAdapterBinding
 import java.text.SimpleDateFormat
 import java.util.*
