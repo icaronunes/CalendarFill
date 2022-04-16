@@ -2,8 +2,8 @@ package br.com.mirespeiti.calendarfill
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import br.com.mirespeiti.calendarfill.calendardiario.domain.Calendario
-import br.com.mirespeiti.calendarfill.calendardiario.domain.CalendarioItem
+import br.com.mirespeiti.calendarfill.calendar.domain.CalendarioItem
+import br.com.mirespeiti.calendarfill.calendar.domain.Calendario
 import br.com.mirespeiti.calendarfill.domain.MapperMovie
 import br.com.mirespeiti.calendarfill.domain.Resource
 import br.com.mirespeiti.calendarfill.usecase.ReviewsUseCase
@@ -25,7 +25,6 @@ class MainViewModel @Inject constructor(
 
     private val _state = MutableStateFlow(ReviewState())
     val state: StateFlow<ReviewState> = _state.asStateFlow()
-
     private val _stateFake = MutableStateFlow(ReviewState())
     val stateFake: StateFlow<ReviewState> = _stateFake.asStateFlow()
 

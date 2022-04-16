@@ -1,7 +1,6 @@
-package br.com.mirespeiti.calendarfill.calendardiario.ext
+package br.com.mirespeiti.calendarfill.calendar.ext
 
 import android.view.View
-import androidx.core.view.isVisible
 
 fun View.visible() {
     this.visibility = View.VISIBLE

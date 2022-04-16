@@ -1,13 +1,12 @@
-package br.com.mirespeiti.calendarfill.calendardiario.adapter
+package br.com.mirespeiti.calendarfill.calendar.adapter
 
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.res.ResourcesCompat
-import br.com.mirespeiti.calendarfill.R
-import br.com.mirespeiti.calendarfill.calendardiario.CalendarFillInterface
-import br.com.mirespeiti.calendarfill.calendardiario.CalendarFillView
-import br.com.mirespeiti.calendarfill.calendardiario.domain.ColorFill
-import br.com.mirespeiti.calendarfill.calendardiario.domain.TypeBackground
+import br.com.mirespeiti.calendarfill.calendar.CalendarFillInterface
+import br.com.mirespeiti.calendarfill.calendar.CalendarFillView
+import br.com.mirespeiti.calendarfill.calendar.domain.ColorFill
+import br.com.mirespeiti.calendarfill.calendar.domain.TypeBackground
 import java.util.*
 
 class FunnyAdapterFill(

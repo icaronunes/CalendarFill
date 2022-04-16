@@ -1,6 +1,6 @@
 package br.com.mirespeiti.calendarfill.domain
 
-import br.com.mirespeiti.calendarfill.calendardiario.domain.CalendarioItem
+import br.com.mirespeiti.calendarfill.calendar.domain.CalendarioItem
 import java.util.*
 
 data class ReviewFill(

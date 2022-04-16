@@ -1,4 +1,4 @@
-package br.com.mirespeiti.calendarfill.calendardiario.ext
+package br.com.mirespeiti.calendarfill.calendar.ext
 
 private const val ZERO = 0
 private const val EMPTY_STRING = ""

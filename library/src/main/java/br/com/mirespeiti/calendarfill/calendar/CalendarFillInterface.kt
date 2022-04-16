@@ -1,7 +1,7 @@
-package br.com.mirespeiti.calendarfill.calendardiario
+package br.com.mirespeiti.calendarfill.calendar
 
 import android.content.Context
-import br.com.mirespeiti.calendarfill.calendardiario.domain.CalendarioItem
+import br.com.mirespeiti.calendarfill.calendar.domain.CalendarioItem
 import java.util.*
 
 /**

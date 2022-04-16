@@ -10,9 +10,13 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+<<<<<<< HEAD
         maven {
             setUrl("https://jitpack.io")
         }
+=======
+        maven {url = uri("https://jitpack.io") }
+>>>>>>> 5c6d431 (fix error)
     }
 }
 rootProject.name = "CalendarFill"
