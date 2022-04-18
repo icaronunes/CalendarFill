@@ -1,8 +1,8 @@
-package br.com.mirespeiti.calendarfill.di
+package br.com.mirespeiti.sample.di
 
-import br.com.mirespeiti.calendarfill.domain.MapperMovie
-import br.com.mirespeiti.calendarfill.domain.MapperToDTO
-import br.com.mirespeiti.calendarfill.domain.ReviewFill
+import br.com.mirespeiti.sample.domain.MapperMovie
+import br.com.mirespeiti.sample.domain.MapperToDTO
+import br.com.mirespeiti.sample.domain.ReviewFill
 import br.com.mirespeiti.data.Result
 import dagger.Binds
 import dagger.Module

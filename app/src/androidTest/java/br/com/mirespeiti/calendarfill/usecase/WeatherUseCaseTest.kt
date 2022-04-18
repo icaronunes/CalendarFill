@@ -1,8 +1,9 @@
 package br.com.mirespeiti.calendarfill.usecase
 
 import br.com.mirespeiti.calendarfill.MainCoroutineScopeRule
-import br.com.mirespeiti.calendarfill.domain.Resource
+import br.com.mirespeiti.sample.domain.Resource
 import br.com.mirespeiti.data.ResponseReview
+import br.com.mirespeiti.sample.usecase.ReviewsUseCase
 import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery
 import io.mockk.coVerify

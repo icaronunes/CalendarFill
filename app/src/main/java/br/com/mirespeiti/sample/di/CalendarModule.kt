@@ -1,4 +1,4 @@
-package br.com.mirespeiti.calendarfill.di
+package br.com.mirespeiti.sample.di
 
 import api.NyTime
 import br.com.mirespeiti.calendarfill.BuildConfig

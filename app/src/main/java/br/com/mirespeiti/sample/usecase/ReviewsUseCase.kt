@@ -1,7 +1,7 @@
-package br.com.mirespeiti.calendarfill.usecase
+package br.com.mirespeiti.sample.usecase
 
 import androidx.lifecycle.SavedStateHandle
-import br.com.mirespeiti.calendarfill.domain.Resource
+import br.com.mirespeiti.sample.domain.Resource
 import kotlinx.coroutines.flow.flow
 import repository.ReviewsRepository
 import java.util.*

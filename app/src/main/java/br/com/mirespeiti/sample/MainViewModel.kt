@@ -1,12 +1,12 @@
-package br.com.mirespeiti.calendarfill
+package br.com.mirespeiti.sample
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import br.com.mirespeiti.calendarfill.calendar.domain.CalendarioItem
 import br.com.mirespeiti.calendarfill.calendar.domain.Calendario
-import br.com.mirespeiti.calendarfill.domain.MapperMovie
-import br.com.mirespeiti.calendarfill.domain.Resource
-import br.com.mirespeiti.calendarfill.usecase.ReviewsUseCase
+import br.com.mirespeiti.sample.domain.MapperMovie
+import br.com.mirespeiti.sample.domain.Resource
+import br.com.mirespeiti.sample.usecase.ReviewsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

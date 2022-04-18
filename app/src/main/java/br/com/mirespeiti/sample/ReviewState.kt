@@ -1,4 +1,4 @@
-package br.com.mirespeiti.calendarfill
+package br.com.mirespeiti.sample
 
 import br.com.mirespeiti.calendarfill.calendar.domain.CalendarioItem
 
