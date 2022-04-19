@@ -65,7 +65,7 @@ publishing {
         create<MavenPublication>("MavenPublication") {
             groupId = "br.com.mirespeiti.calendarfill.calendar"
             artifactId = "library"
-
+            version = "0.7"
         }
     }
 }
