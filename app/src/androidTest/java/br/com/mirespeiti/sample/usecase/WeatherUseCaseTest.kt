@@ -1,6 +1,6 @@
-package br.com.mirespeiti.calendarfill.usecase
+package br.com.mirespeiti.sample.usecase
 
-import br.com.mirespeiti.calendarfill.MainCoroutineScopeRule
+import br.com.mirespeiti.sample.MainCoroutineScopeRule
 import br.com.mirespeiti.sample.domain.Resource
 import br.com.mirespeiti.data.ResponseReview
 import br.com.mirespeiti.sample.usecase.ReviewsUseCase

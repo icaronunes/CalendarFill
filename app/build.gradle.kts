@@ -9,7 +9,7 @@ android {
     compileSdk = 31
 
     defaultConfig {
-        applicationId = "br.com.mirespeiti.calendarfill"
+        applicationId = "br.com.mirespeiti.sample"
         minSdk = 21
         targetSdk = 31
         versionCode = 1

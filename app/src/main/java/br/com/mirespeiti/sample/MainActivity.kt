@@ -7,10 +7,9 @@ import androidx.core.view.WindowCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import br.com.mirespeiti.calendarfill.calendar.CalendarFillView
 import br.com.mirespeiti.calendarfill.calendar.adapter.FunnyAdapterFill
 import br.com.mirespeiti.calendarfill.calendar.ext.makeToast
-import br.com.mirespeiti.calendarfill.databinding.ActivityMainBinding
+import br.com.mirespeiti.sample.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import java.util.*
@@ -20,7 +19,7 @@ class MainActivity : AppCompatActivity() {
 
     lateinit var bind: ActivityMainBinding
 
-    private val viewModel: MainViewModel by viewModels()
+    private val viewModel: MainViewModel2 by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         WindowCompat.setDecorFitsSystemWindows(window, false)

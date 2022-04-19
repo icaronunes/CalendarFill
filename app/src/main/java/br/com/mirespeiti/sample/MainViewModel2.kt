@@ -18,7 +18,7 @@ import javax.inject.Inject
 
 
 @HiltViewModel
-class MainViewModel @Inject constructor(
+class MainViewModel2 @Inject constructor(
     private val useCaseWeather: ReviewsUseCase,
     private val mapper: MapperMovie
 ) : ViewModel() {
