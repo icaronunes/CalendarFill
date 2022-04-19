@@ -10,10 +10,10 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
-        maven {url = uri("https://jitpack.io") }
+        maven { url = uri("https://jitpack.io") }
     }
 }
 rootProject.name = "CalendarFill"
-include(":library")
 include(":app")
 include(":data")
+include(":library")

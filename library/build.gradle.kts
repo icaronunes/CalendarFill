@@ -63,9 +63,9 @@ afterEvaluate {
     publishing {
         publications {
             create<MavenPublication>("MavenPublication") {
-                groupId = "br.com.mirespeiti"
-                artifactId = "library"
-                version = "0.7"
+                groupId = "com.github.icaronunes"
+                artifactId = "CalendarFill"
+                version = "0.9"
             }
         }
     }
