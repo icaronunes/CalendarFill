@@ -6,7 +6,6 @@ plugins {
     id("kotlin-kapt")
     id("dagger.hilt.android.plugin")
     id("maven-publish")
-
 }
 
 buildscript {
@@ -60,12 +59,14 @@ dependencies {
     androidTestImplementation("androidx.test.espresso:espresso-core:3.4.0")
 }
 
-publishing {
-    publications {
-        create<MavenPublication>("MavenPublication") {
-            groupId = "br.com.mirespeiti.calendarfill.calendar"
-            artifactId = "library"
-            version = "0.7"
+afterEvaluate {
+    publishing {
+        publications {
+            create<MavenPublication>("MavenPublication") {
+                groupId = "br.com.mirespeiti"
+                artifactId = "library"
+                version = "0.7"
+            }
         }
     }
 }
