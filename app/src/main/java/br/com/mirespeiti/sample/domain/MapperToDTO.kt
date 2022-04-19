@@ -1,4 +1,4 @@
-package br.com.mirespeiti.calendarfill.domain
+package br.com.mirespeiti.sample.domain
 
 interface MapperToDTO<T, E> {
     fun to(to: T): E

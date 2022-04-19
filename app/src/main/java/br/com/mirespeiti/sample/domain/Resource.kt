@@ -1,4 +1,4 @@
-package br.com.mirespeiti.calendarfill.domain
+package br.com.mirespeiti.sample.domain
 
 sealed class Resource<out T> {
     data class Success<T>(val data: T) : Resource<T>()

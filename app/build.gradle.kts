@@ -9,7 +9,7 @@ android {
     compileSdk = 31
 
     defaultConfig {
-        applicationId = "br.com.mirespeiti.calendarfill"
+        applicationId = "br.com.mirespeiti.sample"
         minSdk = 21
         targetSdk = 31
         versionCode = 1
@@ -50,7 +50,7 @@ dependencies {
     implementation(project(":library"))
     implementation(project(":data"))
 //    implementation("com.github.icaronunes:CalendarFill:1.0.1")
-    implementation("com.github.jitpack:gradle-simple:2.0")
+    implementation("com.github.jitpack:android-example:3.0")
 
 
     implementation("androidx.core:core-ktx:1.7.0")

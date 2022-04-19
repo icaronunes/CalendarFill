@@ -1,4 +1,4 @@
-package br.com.mirespeiti.calendarfill.domain
+package br.com.mirespeiti.sample.domain
 
 import br.com.mirespeiti.calendarfill.calendar.domain.CalendarioItem
 import java.util.*

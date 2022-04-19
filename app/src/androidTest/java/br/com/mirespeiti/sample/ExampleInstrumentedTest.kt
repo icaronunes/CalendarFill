@@ -1,4 +1,4 @@
-package br.com.mirespeiti.calendarfill
+package br.com.mirespeiti.sample
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry

@@ -62,10 +62,10 @@ dependencies {
 
 publishing {
     publications {
-        create<MavenPublication>("maven") {
-            groupId = "br.com.mirespeiti.calendarfill.calendardiario"
+        create<MavenPublication>("MavenPublication") {
+            groupId = "br.com.mirespeiti.calendarfill.calendar"
             artifactId = "library"
-            version = "0.1.1"
+            version = "0.7"
         }
     }
 }
