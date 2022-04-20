@@ -17,6 +17,3 @@ rootProject.name = "CalendarFill"
 include(":app")
 include(":data")
 include(":library")
-include(":app:mylibrary")
-include(":app:mylibrary")
-include(":mylibrary")

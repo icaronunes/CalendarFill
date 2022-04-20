@@ -20,13 +20,6 @@ plugins {
     id("org.jetbrains.kotlin.jvm") version "1.6.10" apply false
 }
 
-//allprojects {
-//    repositories {
-//        maven { url = uri("https://jitpack.io") }
-//
-//    }
-//}
-
 tasks.register("clean", Delete::class.java) {
     delete(rootProject.buildDir)
 }
