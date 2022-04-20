@@ -49,6 +49,7 @@ dependencies {
 
     implementation(project(":library"))
     implementation(project(":data"))
+    implementation(project(":mylibrary"))
 //    implementation("com.github.icaronunes:CalendarFill:1.0.1")
     implementation("com.github.jitpack:android-example:3.0")
 

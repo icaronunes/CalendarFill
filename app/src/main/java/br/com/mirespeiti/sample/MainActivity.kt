@@ -9,6 +9,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import br.com.mirespeiti.calendarfill.calendar.adapter.FunnyAdapterFill
 import br.com.mirespeiti.calendarfill.calendar.ext.makeToast
+import br.com.mirespeiti.mylibrary.Test
 import br.com.mirespeiti.sample.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -19,14 +20,14 @@ class MainActivity : AppCompatActivity() {
 
     lateinit var bind: ActivityMainBinding
 
-    private val viewModel: MainViewModel2 by viewModels()
+    private val viewModel: MainViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         WindowCompat.setDecorFitsSystemWindows(window, false)
         super.onCreate(savedInstanceState)
         bind = ActivityMainBinding.inflate(layoutInflater)
         setContentView(bind.root)
-
+        Test.ENADA
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.CREATED) {
                 viewModel.state.collect { itens ->
