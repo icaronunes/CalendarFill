@@ -49,9 +49,6 @@ dependencies {
 
     implementation(project(":library"))
     implementation(project(":data"))
-//    implementation("com.github.icaronunes:CalendarFill:1.0.1")
-    implementation("com.github.jitpack:android-example:3.0")
-
 
     implementation("androidx.core:core-ktx:1.7.0")
     implementation("androidx.appcompat:appcompat:1.4.1")
